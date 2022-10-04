@@ -181,104 +181,49 @@
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane animated fadeInRight active" id="pills-latest" role="tabpanel" aria-labelledby="pills-latest-tab">
                     <div class="bn-list-post-block">
-                        <ul class="bn-list-post">
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
+                        <?php
+                        $run = mysqli_query($connect, "SELECT * FROM `posts` WHERE active='Yes' ORDER BY id DESC LIMIT 4");
+                        $count = mysqli_num_rows($run);
+                        if ($count <= 0) {
+                            echo 'There are no published posts';
+                        } else {
+                            echo '<ul class="bn-list-post">';
+                            while ($row = mysqli_fetch_assoc($run)) {
+                        ?>
+                                <li>
+                                    <div class="bn-post-block-style media">
+                                        <?php
+                                        if($row['image'] != "") {
+                                        ?>
+                                        <div class="bn-post-thumb">
+                                            <a href="<?php echo 'post.php?id=' . $row['id']; ?>">
+                                                <img class="img-fluid" src="<?php echo $row['image']; ?>" alt="<?php echo $row['title']; ?>">
+                                            </a>
                                         </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">The worth of a man lies in what he does well</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
+                                        <?php
+                                        }
+                                        ?>
+                                        <!-- Post Thumb End -->
+                                        <div class="bn-post-content media-body">
+                                            <div class="bn-grid-category">
+                                                <a class="bn-post-cat" href="<?php echo 'category.php?id=' . $row['category_id']; ?>"><?php echo post_category($row['category_id']) ?></a>
+                                            </div>
+                                            <h2 class="bn-post-title">
+                                                <a href="<?php echo 'post.php?id=' . $row['id']; ?>"><?php echo $row['title']; ?></a>
+                                            </h2>
+                                            <div class="bn-post-meta bn-mb-7">
+                                                <span class="bn-post-date"><i class="far fa-clock"></i> <?php echo $row['date'] . ', ' . $row['time']; ?></span>
+                                            </div>
                                         </div>
+                                        <!-- Post Content End -->
                                     </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 1 End -->
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
-                                        </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">A man is known by the company he keeps</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
-                                    </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 2 End -->
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
-                                        </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">Better have a wise enemy than a foolish friend</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
-                                    </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 3 End -->
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
-                                        </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">The fear of God is the beginning of wisdom</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
-                                    </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 4 End -->
-                        </ul>
+                                    <!-- Post Block Style End -->
+                                </li>
+                        <?php
+                                }
+                            echo '</ul>';
+                            }
+                        ?>
                         <!-- List Post End -->
                     </div>
                     <!-- List Post Block End -->
@@ -286,209 +231,110 @@
                 <!-- Tab Pane 1 End -->
                 <div class="tab-pane animated fadeInRight" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab">
                     <div class="bn-list-post-block">
-                        <ul class="bn-list-post">
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
+                        <?php
+                        $run = mysqli_query($connect, "SELECT * FROM `posts` WHERE active='Yes' ORDER BY views, id DESC LIMIT 4");
+                        $count = mysqli_num_rows($run);
+                        if ($count <= 0) {
+                            echo 'There are no published posts';
+                        } else {
+                            echo '<ul class="bn-list-post">';
+                            while ($row = mysqli_fetch_assoc($run)) {
+                            ?>
+                                <li>
+                                    <div class="bn-post-block-style media">
+                                        <?php
+                                        if($row['image'] != "") {
+                                            ?>
+                                            <div class="bn-post-thumb">
+                                                <a href="<?php echo 'post.php?id=' . $row['id']; ?>">
+                                                    <img class="img-fluid" src="<?php echo $row['image']; ?>" alt="<?php echo $row['title']; ?>">
+                                                </a>
+                                            </div>
+                                            <?php
+                                        }
+                                        ?>
+                                        <!-- Post Thumb End -->
+                                        <div class="bn-post-content media-body">
+                                            <div class="bn-grid-category">
+                                                <a class="bn-post-cat" href="<?php echo 'category.php?id=' . $row['category_id']; ?>"><?php echo post_category($row['category_id']) ?></a>
+                                            </div>
+                                            <h2 class="bn-post-title">
+                                                <a href="<?php echo 'post.php?id=' . $row['id']; ?>"><?php echo $row['title']; ?></a>
+                                            </h2>
+                                            <div class="bn-post-meta bn-mb-7">
+                                                <span class="bn-post-date"><i class="far fa-clock"></i> <?php echo $row['date'] . ', ' . $row['time']; ?></span>
+                                            </div>
                                         </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">It wasn’t raining when Noah built the ark</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
+                                        <!-- Post Content End -->
                                     </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 1 End -->
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
-                                        </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">It wasn’t raining when Noah built the ark</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
-                                    </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 2 End -->
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
-                                        </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">You will succeed because most people are lazy</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
-                                    </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 3 End -->
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
-                                        </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">Don’t talk unless you can improve the silence</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
-                                    </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 4 End -->
-                        </ul>
-                        <!-- List Post End -->
+                                    <!-- Post Block Style End -->
+                                </li>
+                            <?php
+                                }
+                            echo '</ul>';
+                        }
+                        ?>
                     </div>
                     <!-- List Post Block End -->
                 </div>
                 <!-- Tab pane 2 End -->
                 <div class="tab-pane animated fadeInRight" id="pills-comments" role="tabpanel" aria-labelledby="pills-comments-tab">
                     <div class="bn-list-post-block">
-                        <ul class="bn-list-post">
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
+                        <?php
+                        $query = mysqli_query($connect, "SELECT * FROM `comments` WHERE approved='Yes' ORDER BY `id` DESC LIMIT 4");
+                        $cmnts = mysqli_num_rows($query);
+                        if ($cmnts == "0") {
+                            echo "There are no comments";
+                        } else {
+                            echo '<ul class="bn-list-post">';
+                            while ($row = mysqli_fetch_array($query)) {
+                                $badge = '';
+                                $acuthor = $row['user_id'];
+                                if ($row['guest'] == 'Yes') {
+                                    $acavatar = 'assets/img/avatar.png';
+                                    $badge = ' <span class="badge bg-secondary">Guest</span>';
+                                } else {
+                                    $querych = mysqli_query($connect, "SELECT * FROM `users` WHERE id='$acuthor' LIMIT 1");
+                                    if (mysqli_num_rows($querych) > 0) {
+                                        $rowch = mysqli_fetch_assoc($querych);
+
+                                        $acavatar = $rowch['avatar'];
+                                        $acuthor = $rowch['username'];
+                                    }
+                                }
+
+                                $query2 = mysqli_query($connect, "SELECT * FROM `posts` WHERE active='Yes' AND id='$row[post_id]'");
+                                while ($row2 = mysqli_fetch_array($query2)) {
+                        ?>
+                                    <li>
+                                        <div class="bn-post-block-style media">
+                                            <div class="bn-post-thumb">
+                                                <a href="#">
+                                                    <img class="img-fluid" src="<?php echo $acavatar; ?>" alt="">
+                                                </a>
+                                            </div>
+                                            <!-- Post Thumb End -->
+                                            <div class="bn-post-content media-body">
+                                                <div class="bn-grid-category">
+                                                    <a class="bn-post-cat" href="<?php echo 'category.php?id=' . $row['category_id']; ?>"><?php echo post_category($row['category_id']) ?></a>
+                                                </div>
+                                                <h2 class="bn-post-title">
+                                                    <a href="<?php echo 'post.php?id=' . $row['post_id']; ?>"><?php echo $row2['title']; ?></a>
+                                                </h2>
+                                                <div class="bn-post-meta bn-mb-7">
+                                                    <span class="bn-post-date"><i class="far fa-clock"></i> <?php echo $row['date'] .' ' . $row['time']; ?></span>
+                                                </div>
+                                            </div>
+                                            <!-- Post Content End -->
                                         </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">Content lodges oftener in cottages than palaces</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
-                                    </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 1 End -->
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
-                                        </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">The worth of a man lies in what he does well</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
-                                    </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 2 End -->
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
-                                        </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">A man is known by the company he keeps</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
-                                    </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 3 End -->
-                            <li>
-                                <div class="bn-post-block-style media">
-                                    <div class="bn-post-thumb">
-                                        <a href="#">
-                                            <img class="img-fluid" src="assets/images/800x520.png" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- Post Thumb End -->
-                                    <div class="bn-post-content media-body">
-                                        <div class="bn-grid-category">
-                                            <a class="bn-post-cat" href="#">Sports</a>
-                                        </div>
-                                        <h2 class="bn-post-title">
-                                            <a href="#">Better have a wise enemy than a foolish friend</a>
-                                        </h2>
-                                        <div class="bn-post-meta bn-mb-7">
-                                            <span class="bn-post-date"><i class="far fa-clock"></i> 26 Jan, 2021</span>
-                                        </div>
-                                    </div>
-                                    <!-- Post Content End -->
-                                </div>
-                                <!-- Post Block Style End -->
-                            </li>
-                            <!-- LI 4 End -->
-                        </ul>
+                                        <!-- Post Block Style End -->
+                                    </li>
+                        <?php
+                                }
+                            }
+                            echo '</ul>';
+                        }
+                        ?>
                         <!-- List Post End -->
                     </div>
                     <!-- List Post Block End -->

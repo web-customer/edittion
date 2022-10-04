@@ -119,6 +119,8 @@
 
     <!-- Responsive Styles -->
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="assets/css/rtl.css">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>
@@ -127,7 +129,7 @@
     <![endif]-->
 </head>
 
-<body>
+<body dir="rtl">
 <!-- Start Top Section -->
 <div class="bn-top">
     <div class="container">
@@ -138,32 +140,20 @@
                         <span class="bn-breaking-title-text">Breaking News</span>
                     </div>
                     <div id="bn-breaking-news">
+                        <?php
+                        $run = mysqli_query($connect, "SELECT * FROM `posts` WHERE active='Yes' ORDER BY views, id DESC LIMIT 4");
+                        $count = mysqli_num_rows($run);
+                        if ($count > 0) { ?>
                         <ul class="fade">
+                            <?php  while ($row = mysqli_fetch_assoc($run)) { ?>
                             <li>
                                 <div class="breaking-news-item">
-                                    <a href="#">The worth of a man lies in what he does well</a>
+                                    <a href="<?php echo 'post.php?id=' . $row['id']; ?>"><?php echo $row['title']; ?></a>
                                 </div>
                             </li>
-                            <!-- Breaking News Item 1 End -->
-                            <li>
-                                <div class="breaking-news-item">
-                                    <a href="#">Better have a wise enemy than a foolish friend</a>
-                                </div>
-                            </li>
-                            <!-- Breaking News Item 2 End -->
-                            <li>
-                                <div class="breaking-news-item">
-                                    <a href="#">The fear of God is the beginning of wisdom</a>
-                                </div>
-                            </li>
-                            <!-- Breaking News Item 3 End -->
-                            <li>
-                                <div class="breaking-news-item">
-                                    <a href="#">It wasn’t raining when Noah built the ark</a>
-                                </div>
-                            </li>
-                            <!-- Breaking News Item 4 End -->
+                            <?php } ?>
                         </ul>
+                        <?php } ?>
                     </div>
                     <!-- Breaking News End -->
                 </div>
