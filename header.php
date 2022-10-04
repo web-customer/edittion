@@ -1,9 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <?php
+    $run  = mysqli_query($connect, "SELECT * FROM `settings`");
+    $site = mysqli_fetch_assoc($run);
+    ?>
     <!-- Basic Page -->
     <meta charset="UTF-8">
-    <title>Bn News - Multipurpose Modern Bootstrap 4</title>
+    <?php
+    // SEO Titles
+    if (basename($_SERVER['SCRIPT_NAME']) == 'contact.php') {
+        $pagetitle = 'Contact';
+    } else if (basename($_SERVER['SCRIPT_NAME']) == 'gallery.php') {
+        $pagetitle = 'Gallery';
+    } else if (basename($_SERVER['SCRIPT_NAME']) == 'blog.php') {
+        $pagetitle = 'Blog';
+    } else if (basename($_SERVER['SCRIPT_NAME']) == 'profile.php') {
+        $pagetitle = 'Profile';
+    } else if (basename($_SERVER['SCRIPT_NAME']) == 'login.php') {
+        $pagetitle = 'Sign In';
+    } else if (basename($_SERVER['SCRIPT_NAME']) == 'unsubscribe.php') {
+        $pagetitle = 'Unsubscribe';
+    } else if (basename($_SERVER['SCRIPT_NAME']) == 'search.php') {
+        $word      = $_GET['q'];
+        $pagetitle = 'Search results for "' . $word . '"';
+    } else if (basename($_SERVER['SCRIPT_NAME']) == 'post.php') {
+        $id = (int) $_GET['id'];
+
+        if (empty($id)) {
+            echo '<meta http-equiv="refresh" content="0; url=blog.php">';
+            exit;
+        }
+
+        $runpt = mysqli_query($connect, "SELECT * FROM `posts` WHERE id='$id'");
+        if (mysqli_num_rows($runpt) == 0) {
+            echo '<meta http-equiv="refresh" content="0; url=blog.php">';
+            exit;
+        }
+        $rowpt = mysqli_fetch_assoc($runpt);
+
+        $pagetitle = $rowpt['title'];
+    } else if (basename($_SERVER['SCRIPT_NAME']) == 'page.php') {
+        $id = (int) $_GET['id'];
+
+        if (empty($id)) {
+            echo '<meta http-equiv="refresh" content="0; url=index.php">';
+            exit;
+        }
+
+        $runpp = mysqli_query($connect, "SELECT * FROM `pages` WHERE id='$id'");
+        if (mysqli_num_rows($runpp) == 0) {
+            echo '<meta http-equiv="refresh" content="0; url=index.php">';
+            exit;
+        }
+        $rowpp = mysqli_fetch_assoc($runpp);
+
+        $pagetitle = $rowpp['title'];
+    } else if (basename($_SERVER['SCRIPT_NAME']) == 'category.php') {
+        $id = (int) $_GET['id'];
+
+        if (empty($id)) {
+            echo '<meta http-equiv="refresh" content="0; url=blog.php">';
+            exit;
+        }
+
+        $runct = mysqli_query($connect, "SELECT * FROM `categories` WHERE id='$id'");
+        if (mysqli_num_rows($runct) == 0) {
+            echo '<meta http-equiv="refresh" content="0; url=blog.php">';
+            exit;
+        }
+        $rowct = mysqli_fetch_assoc($runct);
+
+        $pagetitle = $rowct['category'];
+    }
+
+    if (basename($_SERVER['SCRIPT_NAME']) == 'index.php') {
+        echo '<title>' . $site['sitename'] . '</title>';
+        $mt3 = "mt-3";
+    } else {
+        $mt3 = "";
+        echo '<title>' . $pagetitle . ' - ' . $site['sitename'] . '</title>';
+    }
+    ?>
+    <meta name="description" content="<?php echo $site['description']; ?>" />
 
     <!-- Mobile Specific -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -196,9 +275,9 @@
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="bn-search-panel">
-                                <form class="bn-search-group">
+                                <form class="bn-search-group" method="get" action="search.php">
                                     <div class="input-group">
-                                        <input type="search" class="form-control" name="s" placeholder="Search" value="">
+                                        <input type="search" class="form-control" name="q" placeholder="Search" value="">
                                         <button class="input-group-btn search-button">
                                             <i class="fas fa-search"></i>
                                         </button>

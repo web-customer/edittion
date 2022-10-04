@@ -1,137 +1,138 @@
 <?php
 include "core.php";
-head();
+include "header.php";
 ?>
-            <div class="col-md-8">
 
-                <div class="card">
-                    <div class="card-header"><i class="fas fa-search"></i> Search</div>
-                    <div class="card-body">
+<!-- Breadcrumb -->
+<div class="bn-breadcrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ol class="bn-breadcrumb">
+                    <li>
+                        <i class="fa fa-home"></i>
+                        <a href="index.php">Home</a>
+                    </li>
+                    <li><i class="fa fa-angle-right"></i>Search</li>
+                </ol>
+            </div>
+            <!-- Col End -->
+        </div>
+        <!-- Row End -->
+    </div>
+    <!-- Container End -->
+</div>
+<!-- Breadcrumb End -->
 
+<!-- Start Main Content -->
 <?php
 if (isset($_GET['q'])) {
     $word = $_GET['q'];
-    
-    if (strlen($word) < 2) {
-        echo '<div class="alert alert-warning">Enter at least 2 characters to search.</div>';
-    } else {
-        
-        $sql    = "SELECT * FROM posts WHERE active='Yes' AND (title LIKE '%$word%' OR content LIKE '%$word%') ORDER BY id DESC";
-        $result = mysqli_query($connect, $sql);
-        $row    = mysqli_fetch_assoc($result);
-        $count  = mysqli_num_rows($result);
-        if ($count == 0) {
-            echo '<div class="alert alert-info">No results found.</div>';
-        } else {
-        
-            echo '<div class="alert alert-success">' . $count . ' results found.</div>';
+    $postsperpage = 6;
+    $pageNum = 1;
+    if (isset($_GET['page'])) {
+        $pageNum = $_GET['page'];
+    }
+    if (!is_numeric($pageNum)) {
+        echo '<meta http-equiv="refresh" content="0; url=blog.php">';
+        exit();
+    }
+    $rows = ($pageNum - 1) * $postsperpage;
 
-$postsperpage = 6;
+    $run   = mysqli_query($connect, "SELECT * FROM `posts` WHERE (title LIKE '%$word%' OR content LIKE '%$word%') AND active='Yes' ORDER BY id DESC LIMIT $rows, $postsperpage");
+    $count = mysqli_num_rows($run);
+?>
+<section class="main-content bn-category-grid pt-0">
+    <div class="container">
+        <div class="row bn-gutter-30">
+            <div class="col-lg-8 col-md-12">
+                <h2 class="bn-Page-title">Search</h2>
+                <p class="bn-page-description">Friendship is much beyond roaming together and sharing good moments, it is when someone comes to rescue you from the worst phase of life. Friendship is eternal.</p>
+                <div class="row">
 
-$pageNum = 1;
-if (isset($_GET['page'])) {
-    $pageNum = $_GET['page'];
-}
-if (!is_numeric($pageNum)) {
-    echo '<meta http-equiv="refresh" content="0; url=blog.php">';
-    exit();
-}
-$rows = ($pageNum - 1) * $postsperpage;
-
-$run   = mysqli_query($connect, "SELECT * FROM `posts` WHERE (title LIKE '%$word%' OR content LIKE '%$word%') AND active='Yes' ORDER BY id DESC LIMIT $rows, $postsperpage");
-$count = mysqli_num_rows($run);
-if ($count <= 0) {
-    echo '<div class="alert alert-info">There are no published posts</div>';
-} else {
-    while ($row = mysqli_fetch_assoc($run)) {
-        
-        $image = "";
-        if($row['image'] != "") {
-            $image = '<img src="' . $row['image'] . '" alt="' . $row['title'] . '" style="width: 100%; height: 225px;">';
-        } else {
-            $image = '<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <title>No Image</title><rect width="100%" height="100%" fill="#55595c"/>
-            <text x="46%" y="50%" fill="#eceeef" dy=".3em">No Image</text></svg>';
-        }
-        
-        echo '
-                        <div class="card shadow-sm">
-                            <a href="post.php?id=' . $row['id'] . '">
-                                '. $image .'
-                            </a>
-                            <div class="card-body">
-                                <a href="post.php?id=' . $row['id'] . '"><h5 class="card-title">' . $row['title'] . '</h5></a>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="category.php?id=' . $row['category_id'] . '"><span class="badge bg-primary">' . post_category($row['category_id']) . '</span></a>
-                                    <small><i class="fas fa-comments"></i> Comments: 
-                                        <a href="post.php?id=' . $row['id'] . '#comments" class="blog-comments"><b>' . post_commentscount($row['id']) . '</b></a>
-                                    </small>
-                                </div>
-                                <p class="card-text">' . short_text(strip_tags(html_entity_decode($row['content'])), 400) . '</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <b><i class="fas fa-user-edit"></i> ' . post_author($row['author_id']) . '</b>
-                                    <small class="text-muted"><i class="far fa-calendar-alt"></i> ' . $row['date'] . ', ' . $row['time'] . '</small>
+                    <?php
+                    if ($count <= 0) {
+                        echo '<div class="alert alert-info">There are no published posts</div>';
+                    } else {
+                        while ($row = mysqli_fetch_assoc($run)) {
+                    ?>
+                        <div class="col-md-6">
+                        <div class="bn-post-block-style">
+                            <?php if($row['image'] != "") { ?>
+                            <div class="bn-post-thumb">
+                                <a href="<?php echo 'post.php?id=' . $row['id']; ?>">
+                                    <img class="img-fluid" src="<?php echo $row['image']; ?>" alt="<?php echo $row['title']; ?>">
+                                </a>
+                                <div class="bn-category">
+                                    <a class="bn-post-category" href="<?php echo 'category.php?id=' . $row['category_id']; ?>"><?php echo post_category($row['category_id']) ?></a>
                                 </div>
                             </div>
-                        </div><br />
-';
-    }
-    
-    $query   = "SELECT COUNT(id) AS numrows FROM posts WHERE (title LIKE '%$word%' OR content LIKE '%$word%') AND active='Yes'";
-    $result  = mysqli_query($connect, $query);
-    $row     = mysqli_fetch_array($result);
-    $numrows = $row['numrows'];
-    $maxPage = ceil($numrows / $postsperpage);
-    
-    $pagenums = '';
-    
-    echo '<center>';
-    
-    for ($page = 1; $page <= $maxPage; $page++) {
-        if ($page == $pageNum) {
-            $pagenums .= "<a href='?q=$word&page=$page' class='btn btn-primary'>$page</a> ";
-        } else {
-            $pagenums .= "<a href=\"?q=$word&page=$page\" class='btn btn-default'>$page</a> ";
-        }
-    }
-    
-    if ($pageNum > 1) {
-        $page     = $pageNum - 1;
-        $previous = "<a href=\"?q=$word&page=$page\" class='btn btn-default'><i class='fa fa-arrow-left'></i> Previous</a> ";
-        
-        $first = "<a href=\"?q=$word&page=1\" class='btn btn-default'><i class='fa fa-arrow-left'\></i> <i class='fa fa-arrow-left'></i> First</a> ";
-    } else {
-        $previous = ' ';
-        $first    = ' ';
-    }
-    
-    if ($pageNum < $maxPage) {
-        $page = $pageNum + 1;
-        $next = "<a href=\"?q=$word&page=$page\" class='btn btn-default'><i class='fa fa-arrow-right'></i> Next</a> ";
-        
-        $last = "<a href=\"?q=$word&page=$maxPage\" class='btn btn-default'><i class='fa fa-arrow-right'></i>  <i class='fa fa-arrow-r'></i> Last</a> ";
-    } else {
-        $next = ' ';
-        $last = ' ';
-    }
-    
-    echo $first . $previous . $pagenums . $next . $last;
-    
-    echo '</center>';
-}
-}
-}
+                            <?php } ?>
+                            <!-- Post Thumb End -->
+                            <div class="bn-post-content">
+                                <h2 class="bn-post-title title-md">
+                                    <a href="<?php echo 'post.php?id=' . $row['id']; ?>"><?php echo $row['title']; ?></a>
+                                </h2>
+                                <div class="bn-post-meta bn-mb-7">
+                                    <span class="bn-post-author"><a href="#"><i class="fa fa-user"></i> <?php echo post_author($row['author_id']); ?></a></span>
+                                    <span class="bn-post-date"><i class="far fa-clock"></i> <?php echo $row['date'] . ', ' . $row['time']; ?></span>
+                                </div>
+                                <p><?php echo short_text(strip_tags(html_entity_decode($row['content'])), 400); ?></p>
+                            </div>
+                            <!-- Post Content End -->
+                        </div>
+                        <!-- Post Block Style End -->
+                    </div>
+                    <?php
+                        }
+                    }
+                    ?>
+                </div>
+
+                <?php
+                $query   = "SELECT COUNT(id) AS numrows FROM posts WHERE category_id='$category_id' and active='Yes'";
+                $result  = mysqli_query($connect, $query);
+                $row     = mysqli_fetch_array($result);
+                $numrows = $row['numrows'];
+
+                if ($count > 0 && $numrows > $postsperpage) {
+                ?>
+                <!-- Row End -->
+                <div class="bn-gap-30"></div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="load-more-btn text-center">
+                            <button class="btn"> Load More </button>
+                        </div>
+                    </div>
+                    <!-- Col End -->
+                </div>
+                <!-- Row End -->
+                <?php
+                }
+                ?>
+            </div>
+
+            <!-- Col End -->
+            <div class="col-lg-4 col-md-12">
+                <!-- Start Sidebar -->
+                <?php include "sidebar.php"; ?>
+                <!-- Sidebar End -->
+            </div>
+            <!-- Col End -->
+        </div>
+        <!-- Row End -->
+    </div>
+    <!-- Container End -->
+</section>
+<!-- Main Content End -->
+
+<?php
 } else {
     echo '<meta http-equiv="refresh" content="0; url=index.php">';
     exit();
 }
 ?>
-
-                    </div>
-                </div>
-                
-            </div>
 <?php
-sidebar();
-footer();
+include "footer.php";
 ?>

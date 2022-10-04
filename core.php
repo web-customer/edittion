@@ -259,9 +259,7 @@ function head()
     }
 ?>
         
-        <meta name="description" content="<?php
-    echo $site['description'];
-?>" />
+        <meta name="description" content="<?php echo $site['description']; ?>" />
         <meta name="author" content="Antonov_WEB" />
         <meta name="robots" content="index, follow, all" />
         <link rel="shortcut icon" href="assets_/img/favicon.png" type="image/png" />
