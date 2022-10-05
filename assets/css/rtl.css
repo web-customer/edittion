@@ -34,7 +34,8 @@
 }
 
 .bn-widget-title::before,
-.bn-block-title::before {
+.bn-block-title::before,
+.bn-Page-title::before {
     right: 0;
     left: inherit;
 }
@@ -54,5 +55,14 @@
 }
 
 .bn-post-meta span {
+    margin-right: 0;
+}
+
+.bn-comment .pull-left {
+    float: right !important;
+}
+
+.bn-comments-list .bn-comment .bn-comment-avatar {
+    margin-left: 30px;
     margin-right: 0;
 }
