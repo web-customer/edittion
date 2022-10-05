@@ -86,7 +86,7 @@ $post_id     = $row['id'];
                     <!-- Single Post Content End -->
                     <div class="bn-single-post-footer">
                         <div class="bn-tag-lists">
-                            <span>Tags: </span><a href="#">Life Style</a>
+                            <span>Tags: </span><a href="<?php echo 'category.php?id=' . $row['category_id']; ?>"><?php echo post_category($row['category_id']) ?></a>
                         </div>
 
                         <!-- Tag Lists -->
@@ -95,7 +95,7 @@ $post_id     = $row['id'];
                                 <img src="assets/images/100x100.png" alt="">
                             </div>
                             <div class="bn-author-info">
-                                <h3>James Bond</h3>
+                                <h3><?php echo post_author($row['author_id']); ?></h3>
                                 <p>This helps them to function like healthy individuals in life as they learn to draw a line as and when needed in a relation. This greatly helps in the emotional development of an individual. However.</p>
                             </div>
                         </div>
@@ -200,6 +200,7 @@ $post_id     = $row['id'];
                         <div class="bn-gap-30"></div>
 
                         <!-- Comments Start -->
+                        <!--
                         <div class="bn-comments-section">
                             <h3 class="bn-block-title"><span>03 Comments</span></h3>
                             <ul class="bn-comments-list">
@@ -218,7 +219,7 @@ $post_id     = $row['id'];
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Comments End -->
+
                                     <ul class="bn-comments-reply">
                                         <li>
                                             <div class="bn-comment">
@@ -235,10 +236,10 @@ $post_id     = $row['id'];
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Comments End -->
+
                                         </li>
                                     </ul>
-                                    <!-- Comments Reply End -->
+
                                     <div class="bn-comment last">
                                         <img class="bn-comment-avatar pull-left" alt="" src="assets/images/80x80.png">
                                         <div class="bn-comment-body">
@@ -253,15 +254,14 @@ $post_id     = $row['id'];
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Comments End -->
                                 </li>
-                                <!-- Comments List LI End -->
                             </ul>
-                            <!-- Comments List Ul End -->
                         </div>
+                        -->
                         <!-- Comment End -->
 
                         <!-- Comment Form -->
+                        <!--
                         <div class="gap-50 d-none d-md-block"></div>
                         <div class="bn-comments-form">
                             <h3 class="title-normal">Leave a comment</h3>
@@ -272,34 +272,29 @@ $post_id     = $row['id'];
                                             <textarea class="form-control input-msg required-field" id="message" placeholder="Your Comment" rows="10" required=""></textarea>
                                         </div>
                                     </div>
-                                    <!-- Col End -->
-                                    <div class="col-md-12">
+                                        <div class="col-md-12">
                                         <div class="form-group">
                                             <input class="form-control" name="name" id="name" placeholder="Your Name" type="text" required="">
                                         </div>
                                     </div>
-                                    <!-- Col End -->
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <input class="form-control" name="email" id="email" placeholder="Your Email" type="email" required="">
                                         </div>
                                     </div>
-                                    <!-- Col End -->
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <input class="form-control" placeholder="Your Website" type="text" required="">
                                         </div>
                                     </div>
-                                    <!-- Col End -->
                                 </div>
-                                <!-- Form Row End -->
                                 <div class="clearfix">
                                     <button class="comments-btn btn btn-primary" type="submit">Post Comment</button>
                                 </div>
                             </form>
-                            <!-- Form End -->
+
                         </div>
-                        <!-- Comment Form End -->
+                        -->
                     </div>
                     <!-- Single Post Footer End -->
                 </div>
