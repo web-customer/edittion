@@ -246,11 +246,45 @@ $post_id     = $row['id'];
                         <div class="gap-50 d-none d-md-block"></div>
                         <div class="bn-comments-form">
                             <h3 class="title-normal">Leave a comment</h3>
-                            <form method="POST" action="#">
+                            <?php
+                            $guest = 'No';
+
+                            $queryst = mysqli_query($connect, "SELECT * FROM `settings` LIMIT 1");
+                            $rowst   = mysqli_fetch_assoc($queryst);
+                            if ($logged == 'No' AND $rowst['comments'] == 'guests') {
+                                $cancomment = 'Yes';
+                            } else {
+                                $cancomment = 'No';
+                            }
+                            if ($logged == 'Yes') {
+                                $cancomment = 'Yes';
+                            }
+
+                            if ($logged == 'No') {
+                                $author = $_POST['author'];
+                            } else {
+                                $author = $rowu['id'];
+                            }
+
+                            if (isset($_POST['post'])) {
+                                $queryst = mysqli_query($connect, "SELECT date_format FROM settings LIMIT 1");
+                                $st      = mysqli_fetch_assoc($queryst);
+
+                                $authname_problem = 'No';
+                                $date             = date($st['date_format']);
+                                $time             = date('H:i');
+
+                                $comment = $_POST['message'];
+
+                                $runq = mysqli_query($connect, "INSERT INTO `comments` (`post_id`, `comment`, `user_id`, `date`, `time`, `guest`) VALUES ('$row[id]', '$comment', '$author', '$date', '$time', '$guest')");
+                                echo '<div class="alert alert-success">Your comment has been successfully posted</div>';
+                            }
+                            ?>
+                            <form method="POST" action="post.php?id=<?php echo $id; ?>">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <textarea class="form-control input-msg required-field" id="message" placeholder="Your Comment" rows="10" required=""></textarea>
+                                            <textarea name="message" class="form-control input-msg required-field" id="message" placeholder="Your Comment" rows="10" required=""></textarea>
                                         </div>
                                     </div>
                                         <div class="col-md-12">
@@ -258,19 +292,9 @@ $post_id     = $row['id'];
                                             <input class="form-control" name="author" id="author" placeholder="Your Name" type="text" required="">
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <input class="form-control" name="email" id="email" placeholder="Your Email" type="email" required="">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <input class="form-control" placeholder="Your Website" type="text" required="">
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="clearfix">
-                                    <button class="comments-btn btn btn-primary" type="submit">Post Comment</button>
+                                    <button class="comments-btn btn btn-primary"  value="Post"  name="post" type="submit">Post Comment</button>
                                 </div>
                             </form>
 

@@ -33,25 +33,13 @@ if (isset($_POST['send'])) {
     $content = $_POST['text'];
     $date = date('d F Y');
     $time = date('H:i');
-    $captcha = '';
 
-    if (isset($_POST['g-recaptcha-response'])) {
-        $captcha = $_POST['g-recaptcha-response'];
-    }
-
-    if ($captcha) {
-        $url          = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($row['gcaptcha_secretkey']) . '&response=' . urlencode($captcha);
-        $response     = file_get_contents($url);
-        $responseKeys = json_decode($response, true);
-        if ($responseKeys["success"]) {
-
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo '<div class="alert alert-danger">The entered E-Mail Address is invalid.</div>';
-            } else {
-                $query = mysqli_query($connect, "INSERT INTO messages (name, email, content, date, time) VALUES('$name','$email','$content','$date','$time')");
-                echo '<div class="alert alert-success">Your message has been sent successfully.</div>';
-            }
-        }
+    $message = '';
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message = '<div class="alert alert-danger">The entered E-Mail Address is invalid.</div>';
+    } else {
+        $query = mysqli_query($connect, "INSERT INTO messages (name, email, content, date, time) VALUES('$name','$email','$content','$date','$time')");
+        $message = '<div class="alert alert-success">Your message has been sent successfully.</div>';
     }
 }
 ?>
@@ -68,6 +56,7 @@ if (isset($_POST['send'])) {
                 <form id="contact-form" action="" method="post">
                     <div class="error-container"></div>
                     <div class="row">
+                        <div class="col-12"><?php echo $message; ?></div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Name</label>
@@ -87,10 +76,9 @@ if (isset($_POST['send'])) {
                     <div class="form-group">
                         <label>Message</label>
                         <textarea class="form-control form-control-message" name="text" id="text" placeholder="" rows="10" required=""></textarea>
-                        <center><div class="g-recaptcha" data-sitekey="<?php echo $row['gcaptcha_sitekey']; ?>"></div></center>
                     </div>
                     <div>
-                        <button class="btn-submit btn btn-primary" type="submit" value="Send">Send Message</button>
+                        <button class="btn-submit btn btn-primary" name="send" type="submit" value="Send">Send Message</button>
                     </div>
                 </form>
                 <!-- Form End -->
